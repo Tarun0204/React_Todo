@@ -1,4 +1,3 @@
-// Write your code here
 import {Component} from 'react'
 import TodoItem from '../TodoItem'
 import './index.css'
@@ -41,6 +40,26 @@ const initialTodosList = [
 class SimpleTodos extends Component {
   state = {
     todosList: initialTodosList,
+    newTodo: '',
+  }
+
+  handleInputChange = event => {
+    this.setState({newTodo: event.target.value})
+  }
+
+  handleAddTodo = () => {
+    const {newTodo, todosList} = this.state
+    if (newTodo.trim() !== '') {
+      const newTodoAdded = {
+        id: todosList.length + 1,
+        title: newTodo,
+      }
+
+      this.setState(prevState => ({
+        todosList: [...prevState.todosList, newTodoAdded],
+        newTodo: '',
+      }))
+    }
   }
 
   deleteTodo = id => {
@@ -53,12 +72,29 @@ class SimpleTodos extends Component {
   }
 
   render() {
-    const {todosList} = this.state
+    const {todosList, newTodo} = this.state
 
     return (
       <div className="app-container">
         <div className="simple-todos-container">
           <h1 className="heading">Simple Todos</h1>
+          <div className="input-field-container">
+            <input
+              type="text"
+              className="input-todo"
+              placeholder="Add New Todo"
+              value={newTodo}
+              onChange={this.handleInputChange}
+            />
+            <button
+              className="add-btn"
+              type="button"
+              onClick={this.handleAddTodo}
+            >
+              Add
+            </button>
+          </div>
+
           <ul className="todos-list">
             {todosList.map(eachTodo => (
               <TodoItem
